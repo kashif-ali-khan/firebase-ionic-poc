@@ -1,3 +1,4 @@
+
 This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
 
 ## How to use this template
@@ -23,4 +24,9 @@ $ ionic cordova run ios
 ```
 
 Substitute ios for android if not on a Mac.
+
+
+# firebase-ionic-poc
+This POC done in IONIC 3 to demonstrate firebase 
+Currently it is build for Android platform , further it can also be extended to IOS also
 
