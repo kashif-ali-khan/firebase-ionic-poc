@@ -45,48 +45,6 @@ export class SongsPage implements OnDestroy {
     });
 
 
-    // this.songlist = this.songs.snapshotChanges().map(action=>{
-
-    //      let data = new Array();
-    //     action.forEach(item=>{
-    //       let newObj = {
-    //         key:item.key,
-    //         data:item.payload.val()
-    //       }
-         
-    //       data.push(newObj);
-            
-    //     })
-    //     return data;
-    //    })
-    //console.log(this.songlist)
-    //  this.songs.snapshotChanges().map(action=>{
-    //    let data = new Array();
-    //   action.forEach(item=>{
-    //     let newObj = {
-    //       key:item.key,
-    //       data:item.payload.val()
-    //     }
-       
-    //     data.push(newObj);
-          
-    //   })
-    //   return data;
-    //  }).subscribe(res=>{
-    //  // console.log(res);
-        
-
-
-    //    this.songlist = res;
-    //    //console.log(this.songlist);
-
-    //  },error=>{
-    //    this.presentToast(error.message);
-    //    console.log(error)
-    //  });
-     
-     //.subscribe(res=>this.songs = res;);
-    //console.log(this.songs)
 
   }
   ngOnDestroy(){

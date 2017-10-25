@@ -22,16 +22,12 @@ export class SignupPage implements OnInit {
   signinForm: FormGroup;
   base64Image:any;
   imageBase64:any;
-  // email: AbstractControl;
-  // password: AbstractControl;
+
   error: any;
 
   constructor(public camera:Camera,private toast:ToastController,public authService: AuthProvider,public navCtrl: NavController, public navParams: NavParams,
     private loadingCtrl: LoadingController,private fb: FormBuilder) {
- 
-
-  //this.email = this.loginForm.controls['email'];     
-  //this.password = this.loginForm.controls['password'];     
+   
   }
 
   accessGallery(){
