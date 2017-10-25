@@ -1,0 +1,36 @@
+<ion-header>
+    <ion-navbar>
+      <ion-title>
+       
+       
+          <a *ngIf="userInformation" class="item item-avatar user-content" href="#">
+              <img class="avatar-image" src="data:image/jpeg;base64,{{userInformation?.photoURL}}">
+              <h6>Welcome {{userInformation?.displayName}}</h6>
+              <p>{{userInformation?.email}}</p>
+            </a>
+     
+      </ion-title>
+      <ion-buttons end>
+      <button ion-button icon-only (click)="addSong()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="logout()">
+          <ion-icon name="log-out"></ion-icon>
+        </button>
+
+     
+    </ion-buttons>
+    </ion-navbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <ion-title *ngIf="!songlist">No songs</ion-title>
+    <ion-list>
+     
+      <ion-item *ngFor="let song of songlist   " (click)="showOptions(song.key, song.data.title)">
+       
+        {{song.data.title }}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+  

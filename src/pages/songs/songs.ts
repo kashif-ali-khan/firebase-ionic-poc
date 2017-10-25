@@ -1,47 +1,105 @@
-import { Component } from '@angular/core';
-import { NavController, AlertController,ActionSheetController, ToastController } from 'ionic-angular';
+import { Component, OnDestroy } from '@angular/core';
+import { NavController, AlertController,ActionSheetController, ToastController, LoadingController } from 'ionic-angular';
 //import { AngularFireModule } from 'angularfire2';
 import {AngularFireDatabase,AngularFireList  } from 'angularfire2/database';
 import { AuthProvider } from '../../providers/auth/auth';
-
+import { LoginPage } from '../login/login';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-songs',
+  templateUrl: 'songs.html',
 })
-export class HomePage {
+export class SongsPage implements OnDestroy {
   songs: AngularFireList<any>;
   songlist:any;
-  constructor(public authService: AuthProvider,private toastCtrl: ToastController,public navCtrl: NavController,af: AngularFireDatabase ,private alertCtrl: AlertController,public actionSheetCtrl: ActionSheetController) {
-     this.songs = af.list('/songs');
-     this.songs.snapshotChanges().map(action=>{
-       let data = new Array();
-      action.forEach(item=>{
-        let newObj = {
-          key:item.key,
-          data:item.payload.val()
-        }
+  subscription:Subscription;
+  userInformation:any;
+  userdata:any;
+  constructor(public authService: AuthProvider,private toastCtrl: ToastController,
+    public navCtrl: NavController,private af: AngularFireDatabase ,
+    private alertCtrl: AlertController,public actionSheetCtrl: ActionSheetController,private loadigctrl:LoadingController) {
+     
+    this.userdata = this.authService.getUserData().map(changes=>{
+      return changes!=null?changes.providerData[0]:null;
+    });
+    
+
+
+      this.userdata.subscribe(response=>{
+        this.userInformation = response;
+        console.log(this.userInformation);
+        console.log('I am here')
        
-        data.push(newObj);
-          
+        //this.userInformation.photoURL = 'data:image/jpeg;base64,'+this.userInformation.photoURL;
       })
-      return data;
-     }).subscribe(res=>{
-     // console.log(res);
+
+    this.songs = this.af.list('/songs');
+     this.subscription = this.songs.snapshotChanges().map(changes => {
+      return changes.map(c => ({ key: c.payload.key, data:c.payload.val() }));
+    }).subscribe(res=>{
+      this.songlist = res;
+    },error=>{
+      this.presentToast(error.message);
+
+    });
+
+
+    // this.songlist = this.songs.snapshotChanges().map(action=>{
+
+    //      let data = new Array();
+    //     action.forEach(item=>{
+    //       let newObj = {
+    //         key:item.key,
+    //         data:item.payload.val()
+    //       }
+         
+    //       data.push(newObj);
+            
+    //     })
+    //     return data;
+    //    })
+    //console.log(this.songlist)
+    //  this.songs.snapshotChanges().map(action=>{
+    //    let data = new Array();
+    //   action.forEach(item=>{
+    //     let newObj = {
+    //       key:item.key,
+    //       data:item.payload.val()
+    //     }
+       
+    //     data.push(newObj);
+          
+    //   })
+    //   return data;
+    //  }).subscribe(res=>{
+    //  // console.log(res);
         
 
 
-       this.songlist = res;
-       //console.log(this.songlist);
+    //    this.songlist = res;
+    //    //console.log(this.songlist);
 
-     },error=>{
-       this.presentToast(error.message);
-       console.log(error)
-     });
+    //  },error=>{
+    //    this.presentToast(error.message);
+    //    console.log(error)
+    //  });
      
      //.subscribe(res=>this.songs = res;);
     //console.log(this.songs)
 
+  }
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
+  }
+
+  logout(){
+    this.authService.logout().subscribe(()=>{
+     // this.songs
+    // this.userdata.unsubscribe();
+     this.subscription.unsubscribe();
+      this.navCtrl.push(LoginPage);
+    });
   }
 
   presentToast(message:string) {
